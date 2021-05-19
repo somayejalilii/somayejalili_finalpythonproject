@@ -1,2 +1,2 @@
-id_ticket ,discount_code, name_event, expdate_event, time_event, cost_event, capacity_total_event,capacity_residual_event, place_event
-1,"4444,5555,1234",a,9/3/2020,18,20000,20,35,t
+id_ticket,discount_code,name_event,expdate_event,time_event,cost_event,capacity_total_event,capacity_residual_event,place_event
+1,"4444,5555,1234",a,9/3/2020,18,20000,20,8,t

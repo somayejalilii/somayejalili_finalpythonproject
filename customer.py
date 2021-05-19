@@ -1,7 +1,7 @@
 import csv
 import sys
 import pandas as pd
-from loger import file_logger2 , my_logger
+from loger import file_logger2, my_logger
 
 
 class Customer:
@@ -20,23 +20,20 @@ class Customer:
         self.discount_percent = discount_percent
         self.role = role
 
-    def buy_ticket(self, discount_percent, discount_code, role):
+    @staticmethod
+    def buy_ticket():
         """
         In this method, the ticket code and number of users are received from the user and,
          if having a discount code,
           is calculated with a discount percentage,
             and otherwise the price is calculated without discounts.
              The CSV file is updated after each purchase
-        :param discount_percent:
-        :param discount_code:
-        :param role:
-        :return:
+
         """
-        self.role = role
         try:
             file_list = "list1.csv"
             location = 0
-            row_n = int(input("To purchase tickets, enter the purchase code "))
+            row_n = input("To purchase tickets, enter the purchase code ")
             number_ticket = int(input("number ticket : "))
             change = pd.read_csv('list1.csv')
             with open(file_list, 'r') as csv_file:
@@ -55,32 +52,38 @@ class Customer:
             print(str(e))
             sys.exit()
         try:
-            cod = int(input("If you have a discount code, 1 and otherwise, enter the number 2 :"))
-            if cod == 1:
+            cod = input("If you have a discount code, 1 and otherwise, enter the number 2 :")
+            if cod == "1":
                 dis_cod = int(input("If you have a discount code, enter it : "))
                 try:
                     with open('role.csv', 'r+') as event_file:
                         csv_reader = csv.DictReader(event_file)
                         for row in csv_reader:
-                            if dis_cod in int(row["discount_code"]):
+                            if dis_cod == int(row["discount_code"]):
                                 with open('list1.csv', 'r') as event_csv2:
                                     csv_reader1 = csv.DictReader(event_csv2)
-                                    print(row_n,list(csv_reader1))
-                                    cost = int(list(csv_reader1)[row_n-1]["cost_event"]) * number_ticket - (((int(list(csv_reader1)[row_n-1]["cost_event"]) * number_ticket) * int(row["discount_percent"]) / 100))
-                                    print(f"Latacia {cost} Deposit")
-                                    return f"Your ticket amount by discounting {self.role} is cost"
-                            else:
-                                print("The entered code is not correct")
-                                sys.exit()
+                                    for roww in csv_reader1:
+                                        print(roww.keys())
+                                        if row_n == roww["id_ticket"]:
+                                            cost = int(roww["cost_event"])* number_ticket -((int(roww["cost_event"]) * number_ticket) * int(row["discount_percent"]) / 100)
+                                            print(f"Latacia {cost} Deposit")
+                                            return
+                            # else:
+                            #     print("The entered code is not correct")
                 except Exception as d:
                     print(d)
                     sys.exit()
-            elif cod == 2:
-                with open('list1.csv' , 'r') as event_csv:
-                    print("kod 1")
-                    for row in event_csv:
-                        cost = int(row["cost_event"]) * number_ticket
-                        print("Latacia", cost, "Deposit")
+            elif cod == "2":
+                with open('list1.csv', 'r') as event_csv:
+                    csv_read = csv.DictReader(event_csv)
+                    for ticket_row in csv_read:
+                        print(ticket_row.keys())
+                        if row_n == ticket_row["id_ticket"]:
+                            cost = int(ticket_row["cost_event"]) * number_ticket
+                            print(cost)
+                            print("Latacia", cost, "Deposit")
+                        else:
+                            print(row_n, row["id"])
             my_logger.warning(f"{row_n}is created")
         except Exception as n:
             print(n)
@@ -88,5 +91,5 @@ class Customer:
 
     def __str__(self):
         return
-obj =Customer( name='somaye', password=1234,discount_percent=50, discount_code=1234, role='admin')
-obj.buy_ticket(discount_percent=50, discount_code=1234, role='admin')
+
+Customer.buy_ticket()
