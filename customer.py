@@ -2,7 +2,7 @@ import csv
 import sys
 import pandas as pd
 from loger import file_logger2, my_logger
-
+from colorama import Fore
 
 class Customer:
     def __init__(self, name, password, discount_code, discount_percent, role):
@@ -45,14 +45,14 @@ class Customer:
                         change.to_csv('list1.csv', index=False)
                         file_logger2.info("update file")
                     else:
-                        print("The number entered is more than the ticket capacity ")
+                        print(Fore.RED+"The number entered is more than the ticket capacity ")
                         sys.exit()
                     location += 1
         except Exception as e:
             print(str(e))
             sys.exit()
         try:
-            cod = input("If you have a discount code, 1 and otherwise, enter the number 2 :")
+            cod = input(Fore.BLUE+"If you have a discount code, 1 and otherwise, enter the number 2 :")
             if cod == "1":
                 dis_cod = int(input("If you have a discount code, enter it : "))
                 try:
@@ -66,7 +66,7 @@ class Customer:
                                         print(roww.keys())
                                         if row_n == roww["id_ticket"]:
                                             cost = int(roww["cost_event"])* number_ticket -((int(roww["cost_event"]) * number_ticket) * int(row["discount_percent"]) / 100)
-                                            print(f"Latacia {cost} Deposit")
+                                            print(Fore.GREEN+f"                   ---------------------Latacia {cost} Deposit----------------------------")
                                             return
                             # else:
                             #     print("The entered code is not correct")
@@ -81,7 +81,7 @@ class Customer:
                         if row_n == ticket_row["id_ticket"]:
                             cost = int(ticket_row["cost_event"]) * number_ticket
                             print(cost)
-                            print("Latacia", cost, "Deposit")
+                            print(Fore.GREEN+"                      --------------------------------------Latacia", cost, "Deposit-------------------------------")
                         else:
                             print(row_n, row["id"])
             my_logger.warning(f"{row_n}is created")
@@ -92,4 +92,3 @@ class Customer:
     def __str__(self):
         return
 
-Customer.buy_ticket()

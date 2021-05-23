@@ -1,8 +1,23 @@
 import csv
-from turtle import pd
+from loger import file_logger, file_logger2
 
-from loger import file_logger
-from ticket import Ticket
+class Ticket:
+    """
+    In this class, the possibility of purchasing tickets and calculating the price is done with the discount and edit
+    list of tickets listings
+    """
+
+    def __init__(self, id_ticket, discount_code, name_event, expdate_event, time_event, cost_event,
+                 capacity_residual_event, capacity_total_event, place_event):
+        self.id_ticket = id_ticket
+        self.discount_code = discount_code
+        self.name_event = name_event
+        self.expdate_event = expdate_event
+        self.time_event = time_event
+        self.capacity_total_event = capacity_total_event
+        self.capacity_residual_event = capacity_residual_event
+        self.place_event = place_event
+        self.cost_event = cost_event
 
 
 class Admin:
@@ -31,6 +46,7 @@ class Admin:
             ticket_r = csv.reader(ticket_csv)
             for row in ticket_r:
                 print(row)
+        file_logger2.error("show event")
         return
 
     @staticmethod
@@ -53,18 +69,16 @@ class Admin:
         obj_ticket = Ticket(id_ticket, discount_code, name_event, expdate_event, time_event, cost_event,
                             capacity_total_event,
                             capacity_residual_event, place_event)
-        row_dic = [[obj_ticket.id_ticket, obj_ticket.discount_code, obj_ticket.name_event, obj_ticket.expdate_event,
+        row_list = [[obj_ticket.id_ticket, obj_ticket.discount_code, obj_ticket.name_event, obj_ticket.expdate_event,
                    obj_ticket.time_event, obj_ticket.cost_event, obj_ticket.capacity_total_event,
                    obj_ticket.capacity_residual_event, obj_ticket.place_event]]
-        #row_dic = [int(x.strip()) if x.isdigit() else x for x in row_dic]
         with open(file_list, 'a') as csv_list:
             csv_writer = csv.writer(csv_list)
-            csv_writer.writerows(row_dic)
-        file_logger.info(f"{row_dic}is created")
-        return row_dic
+            csv_writer.writerows(row_list)
+        file_logger.info(f"{row_list}is created")
+        return row_list
 
     def __str__(self):
         return
-Admin.create_event()
 
 
